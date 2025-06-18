@@ -14,3 +14,11 @@ print("Response with start and end dates:", response)
 response = api.tso_offers()
 
 print("Response with no dates:", response)
+
+response = api.tso_offers(start_date=datetime(2025, 1, 1))
+
+print("Response with only start date:", response)
+
+response = api.imbalance_data() 
+
+print("Response with no dates for imbalance data:", response)
