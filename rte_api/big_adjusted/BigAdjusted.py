@@ -1,4 +1,4 @@
-from ..common import RTEAPI
+from common import RTEAPI
 from datetime import datetime
 from typing import Optional
 
@@ -9,7 +9,7 @@ class BigAdjustedAPI(RTEAPI):
 
     def get_updated_data(self, update_date: datetime, update_time_slot: Optional[int] = None, range: str = "0-9999", service_point_type: Optional[str] = None):
         params = {
-            "update_date": update_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "update_date": update_date.strftime(self._date_time_format),
             "range": range
         }
 
