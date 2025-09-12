@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rte-api"
+version = "0.0.1"
+dependencies = [
+    "requests",
+    'importlib-metadata; python_version>="3.13"',
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "hypothesis",
+]
+
+[tool.setuptools.packages.find]
+where = ['.']
+include = ['rte_api*']
+exclude = ['tests*']
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]

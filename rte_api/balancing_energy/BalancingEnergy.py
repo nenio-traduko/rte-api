@@ -1,6 +1,6 @@
-from common import RTEAPI
+from rte_api.common import RTEAPI
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict
 
 class BalancingEnergyAPI(RTEAPI):
     def __init__(self, client_id: str, client_secret: str):
@@ -23,7 +23,7 @@ class BalancingEnergyAPI(RTEAPI):
         except ValueError as e:
             return {"error": e.args[0]}
     
-    def _optional_date_range_params(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> dict[str, str]:
+    def _optional_date_range_params(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> Dict[str, str]:
         params: dict[str, str] = {}
 
         if start_date is not None and end_date is not None:
@@ -32,4 +32,6 @@ class BalancingEnergyAPI(RTEAPI):
         elif start_date is None and end_date is None:
             pass # No params are provided, which is a correct usage of this API
         else:
-            raise ValueError("Both start_date and end_date must be provided or not provided.")
+            raise ValueError("Both start_date and end_date must be provided or excluded.")
+        
+        return params

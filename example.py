@@ -1,5 +1,5 @@
 from os import getenv
-from balancing_energy import BalancingEnergyAPI
+from rte_api import BalancingEnergyAPI
 from datetime import datetime
 
 client_id = getenv("RTE_CLIENT_ID", "")

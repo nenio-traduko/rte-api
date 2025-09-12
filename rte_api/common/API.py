@@ -1,4 +1,3 @@
-
 from abc import ABC
 from json import loads
 from urllib.parse import urlparse, ParseResult
@@ -14,7 +13,7 @@ class API(ABC):
         access_token_response = post(token_url, data=data, verify=True, allow_redirects=False, auth=(client_id, client_secret))
         self._tokens = loads(access_token_response.text)
     
-    def get(self, path: str, params: dict[str, str], headers: dict[str, str] = {}) -> Response:
+    def get(self, path: str, params: dict[str, str] = {}, headers: dict[str, str] = {}) -> Response:
         endpoint = self._base_url._replace(path=path).geturl()
         api_call_headers = {'Authorization': 'Bearer ' + self._tokens['access_token']}
         api_call_headers.update(headers)
