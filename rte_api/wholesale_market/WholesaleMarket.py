@@ -8,6 +8,9 @@ class WholesaleMarketAPI(RTEAPI):
         self._api_path = "open_api/wholesale_market/v3/"
 
     def france_power_exchanges(self) -> Dict[str, Any]:
+        """
+        Returns day ahead french power exchange prices.
+        """
         try:
             response = self.get(self._api_path + "france_power_exchanges")
             return response.json()

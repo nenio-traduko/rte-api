@@ -1,24 +1,12 @@
 from os import getenv
-from rte_api import BalancingEnergyAPI
-from datetime import datetime
+from rte_api import WholesaleMarketAPI
+from dotenv import load
+
+load()
 
 client_id = getenv("RTE_CLIENT_ID", "")
 client_secret = getenv("RTE_CLIENT_SECRET", "")
 
-api = BalancingEnergyAPI(client_id, client_secret)
+api = WholesaleMarketAPI(client_id, client_secret)
 
-response = api.tso_offers(start_date=datetime(2025, 1, 1), end_date=datetime(2025, 6, 17))
-
-print("Response with start and end dates:", response)
-
-response = api.tso_offers()
-
-print("Response with no dates:", response)
-
-response = api.tso_offers(start_date=datetime(2025, 1, 1))
-
-print("Response with only start date:", response)
-
-response = api.imbalance_data() 
-
-print("Response with no dates for imbalance data:", response)
+print(api.france_power_exchanges())
