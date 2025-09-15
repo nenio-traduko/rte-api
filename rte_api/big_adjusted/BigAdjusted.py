@@ -1,4 +1,4 @@
-from common import RTEAPI
+from rte_api.common import RTEAPI
 from datetime import datetime
 from typing import Optional
 
