@@ -1,6 +1,10 @@
-from rte_api.common import RTEAPI
+from rte_api.common import RTEAPI, ContentType
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from typing import Optional, Dict
+from io import StringIO
+from csv import writer
+
 
 class BalancingEnergyAPI(RTEAPI):
     def __init__(self, client_id: str, client_secret: str):
@@ -9,26 +13,47 @@ class BalancingEnergyAPI(RTEAPI):
 
     def tso_offers(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None):
         try:
-            params: dict[str, str] = self._optional_date_range_params(start_date, end_date)
+            params: dict[str, str] = self._construct_optional_date_range_params(start_date, end_date)
             response = self.get(self._api_path + "tso_offers", params)
             return response.json()
         except ValueError as e:
             return {"error": e.args[0]}
     
-    def imbalance_data(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None):
+    def imbalance_data(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None, responseType: ContentType = ContentType.JSON):
         try:
-            params: dict[str, str] = self._optional_date_range_params(start_date, end_date)
-            response = self.get(self._api_path + "imbalance_data", params, {"Accept": "application/json"})
-            return response.json()
+            params: dict[str, str] = self._construct_optional_date_range_params(
+                self._to_valid_date(start_date),
+                self._to_valid_date(end_date)
+            )
+            response = self.get(self._api_path + "imbalance_data", params, {"Accept": responseType.value})
+
+            match responseType:
+                case ContentType.JSON:
+                    return response.json()
+                case ContentType.CSV:
+                    return response.content.decode()
         except ValueError as e:
             return {"error": e.args[0]}
+        
+    def _to_valid_date(self, date: Optional[datetime]) -> datetime | None:
+        if date is not None:
+            if date.tzinfo is None:
+                raise ValueError('Dates must be localized.')
+            elif isinstance((zoneinfo := date.tzinfo), ZoneInfo):
+                if zoneinfo.tzname == 'Europe/Paris':
+                    return date
+                else:
+                    return date.astimezone(ZoneInfo('Europe/Paris'))
+        else:
+            # it is valid not to send a date
+            return date
     
-    def _optional_date_range_params(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> Dict[str, str]:
+    def _construct_optional_date_range_params(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> Dict[str, str]:
         params: dict[str, str] = {}
 
         if start_date is not None and end_date is not None:
-            params["start_date"] = start_date.strftime(self._date_time_format)
-            params["end_date"] = end_date.strftime(self._date_time_format)
+            params["start_date"] = start_date.isoformat(timespec='seconds')
+            params["end_date"] = end_date.isoformat(timespec='seconds')
         elif start_date is None and end_date is None:
             pass # No params are provided, which is a correct usage of this API
         else:
