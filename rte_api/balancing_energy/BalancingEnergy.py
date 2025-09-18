@@ -12,28 +12,22 @@ class BalancingEnergyAPI(RTEAPI):
         self._api_path = "open_api/balancing_energy/v4/"
 
     def tso_offers(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None):
-        try:
-            params: dict[str, str] = self._construct_optional_date_range_params(start_date, end_date)
-            response = self.get(self._api_path + "tso_offers", params)
-            return response.json()
-        except ValueError as e:
-            return {"error": e.args[0]}
+        params: dict[str, str] = self._construct_optional_date_range_params(start_date, end_date)
+        response = self.get(self._api_path + "tso_offers", params)
+        return response.json()
     
     def imbalance_data(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None, responseType: ContentType = ContentType.JSON):
-        try:
-            params: dict[str, str] = self._construct_optional_date_range_params(
+        params: dict[str, str] = self._construct_optional_date_range_params(
                 self._to_valid_date(start_date),
                 self._to_valid_date(end_date)
             )
-            response = self.get(self._api_path + "imbalance_data", params, {"Accept": responseType.value})
+        response = self.get(self._api_path + "imbalance_data", params, {"Accept": responseType.value})
 
-            match responseType:
-                case ContentType.JSON:
-                    return response.json()
-                case ContentType.CSV:
-                    return response.content.decode()
-        except ValueError as e:
-            return {"error": e.args[0]}
+        match responseType:
+            case ContentType.JSON:
+                return response.json()
+            case ContentType.CSV:
+                return response.content.decode()
         
     def _to_valid_date(self, date: Optional[datetime]) -> datetime | None:
         if date is not None:
