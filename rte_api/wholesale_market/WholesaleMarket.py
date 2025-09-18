@@ -11,8 +11,5 @@ class WholesaleMarketAPI(RTEAPI):
         """
         Returns day ahead french power exchange prices.
         """
-        try:
-            response = self.get(self._api_path + "france_power_exchanges")
-            return response.json()
-        except ValueError as e:
-            return {"error": e.args[0]}
+        response = self.get(self._api_path + "france_power_exchanges")
+        return response.json()
