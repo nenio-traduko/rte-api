@@ -2,8 +2,6 @@ from rte_api.common import RTEAPI, ContentType
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from typing import Optional, Dict
-from io import StringIO
-from csv import writer
 
 
 class BalancingEnergyAPI(RTEAPI):
