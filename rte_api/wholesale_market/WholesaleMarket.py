@@ -1,7 +1,6 @@
 from requests import Response
 from rte_api.common import RTEAPI
-from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 
 class WholesaleMarketAPI(RTEAPI):
     def __init__(self, client_id: str, client_secret: str):
