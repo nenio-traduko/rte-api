@@ -4,9 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rte-api"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
     "requests",
+    "tzdata",
     'importlib-metadata; python_version>="3.13"',
 ]
 

@@ -1,3 +1,4 @@
+from requests import Response
 from rte_api.common import RTEAPI, ContentType
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -52,3 +53,11 @@ class BalancingEnergyAPI(RTEAPI):
             raise ValueError("Both start_date and end_date must be provided or excluded.")
         
         return params
+    
+    def _if_successful(self, response: Response) -> Response:
+        code = response.status_code
+        match response.status_code:
+            case 400:
+                raise RuntimeError(f"{code} Bad Request", response.json()['error_description'])
+            case _:
+                return super()._if_successful(response)
