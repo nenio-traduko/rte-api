@@ -3,13 +3,21 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "rte-api"
+name = "rte-python-api"
 version = "0.0.3"
+authors = [
+  { name="David Alvarado", email="alvaradodavid96@gmail.com" },
+]
 dependencies = [
     "requests",
     "tzdata",
     'importlib-metadata; python_version>="3.13"',
 ]
+license="GPL-3.0-or-later"
+license-files=["License*"]
+
+[project.urls]
+Homepage="https://github.com/nenio-traduko/rte-api"
 
 [project.optional-dependencies]
 test = [
